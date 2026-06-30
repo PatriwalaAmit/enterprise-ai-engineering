@@ -48,7 +48,7 @@ Everything here is designed to help engineers, architects, CTOs, founders, and t
 
 # Start Here
 
-📅 Daily Engineering Challenges
+📅 [Daily Engineering Challenges](./daily-challenges/README.md)
 
 🚀 Projects
 
