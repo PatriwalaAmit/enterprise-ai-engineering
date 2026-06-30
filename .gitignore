@@ -1,0 +1,10 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs/enterprise-ai-engineering/CopilotIndices/17.14.1593.33849
+/.vs/enterprise-ai-engineering/FileContentIndex
+*.wsuo
+*.json
+/.vs/slnx.sqlite
+/.vs/slnx.sqlite-journal
