@@ -1,5 +1,3 @@
-# Day 001 - LLM Inference
-
 # Why can't a 7B parameter model simply run on a GPU with 14 GB of VRAM?
 
 > **Category:** LLM Inference
