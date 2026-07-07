@@ -1,0 +1,43 @@
+# TTS (Text-to-Speech) Configuration
+# Uses any OpenAI-compatible TTS API - same pattern as LLM
+# Local dev: Qwen3-TTS server at localhost:8880 (run: ./scripts/start_qwen3_tts.sh)
+# Production: Qwen3-TTS OpenAI-compatible server on GPU host
+
+tts:
+  # For local dev: http://localhost:8880/v1
+  # For production: http://20.197.48.32:8880/v1
+  base_url: "http://localhost:8880/v1"  # local GPU/native server
+  # For production GPU host: http://20.197.48.32:8880/v1
+  api_key: "not-needed"  # Local Qwen3-TTS server does not require an API key
+  model: "qwen3-tts-customvoice"  # Qwen3-TTS CustomVoice model identifier
+  # Available preset speakers (Qwen3-TTS-12Hz-1.7B-CustomVoice):
+  #   Female: Vivian, Serena, Ono_Anna, Sohee
+  #   Male: Uncle_Fu, Dylan, Eric, Ryan, Aiden
+  # OpenAI voice aliases (auto-mapped by server):
+  #   alloy→Ryan, echo→Aiden, fable→Dylan, onyx→Eric, nova→Serena, shimmer→Vivian
+  default_voice: "Serena"
+  speed: 1.0
+  # Optional style/emotion instruction passed to Qwen3-TTS (empty = neutral)
+  default_instruct: ""
+  # Speech performance layer: split each reply into paced segments (breath after
+  # full stops, beat after "…", slower hesitations/feedback openers) with locally
+  # generated silence between segments. Adds ~1 extra TTS round-trip per sentence.
+  performance:
+    enabled: true
+    period_pause_ms: 350       # breath after a full stop
+    ellipsis_pause_ms: 450     # dramatic beat after "…" and hesitations
+    question_pause_ms: 350     # beat after a question
+    hesitation_speed: 0.85       # "Ah…", "Hmm…" spoken slower
+    feedback_opener_speed: 0.95  # "Excellent…", "You're almost there…" warmer
+    feedback_opener_pause_ms: 300
+    max_segments: 8            # cap synth calls per reply (latency guard)
+    min_segment_chars: 12      # merge fragments shorter than this
+
+server:
+  host: "0.0.0.0"
+  port: 8880
+  model_id: "Qwen/Qwen3-TTS-12Hz-1.7B-CustomVoice"
+  device: "cuda:0"
+  dtype: "bfloat16"
+  attn_implementation: "sdpa"  # use "flash_attention_2" only if flash-attn is installed (devel image)
+  default_language: "Auto"

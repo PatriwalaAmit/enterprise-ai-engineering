@@ -1,0 +1,9 @@
+# GPU-native dependencies (Windows/Linux with NVIDIA GPU, no Docker)
+# Install PyTorch CUDA first, then the rest:
+#   pip install -r requirements-gpu.txt
+
+--extra-index-url https://download.pytorch.org/whl/cu126
+torch>=2.6.0
+torchaudio>=2.6.0
+
+-r requirements.txt

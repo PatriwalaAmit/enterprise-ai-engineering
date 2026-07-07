@@ -1,0 +1,10 @@
+.venv/
+models/
+.hf_cache/
+__pycache__/
+*.py[cod]
+*.wav
+*.mp3
+*.egg-info/
+dist/
+build/

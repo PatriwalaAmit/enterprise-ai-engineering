@@ -1,0 +1,24 @@
+# Server + client dependencies for Qwen3-TTS OpenAI-compatible deployment
+# Install Qwen3-TTS package from vendored repo: pip install -e ./Qwen3-TTS
+
+-e ./Qwen3-TTS
+
+# API server
+fastapi>=0.115.0
+uvicorn[standard]>=0.32.0
+pyyaml>=6.0
+pydantic>=2.0
+
+# Client
+openai>=1.50.0
+
+# Audio processing
+librosa>=0.10.0
+soundfile>=0.12.0
+numpy>=1.26.0
+
+# Optional MP3 export (server)
+pydub>=0.25.1
+
+# Flash Attention 2 (GPU — install separately if build fails):
+# pip install flash-attn --no-build-isolation

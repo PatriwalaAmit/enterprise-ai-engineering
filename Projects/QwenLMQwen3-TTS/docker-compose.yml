@@ -1,0 +1,45 @@
+# Qwen3-TTS OpenAI-compatible server (port 8880)
+#
+# Windows (Docker GPU broken — use native GPU instead):
+#   .\scripts\start_qwen3_tts_gpu.ps1
+#
+# Docker CPU (works on Windows Docker Desktop):
+#   docker compose up -d --build
+#
+# Docker GPU (Linux host with working nvidia-container-toolkit):
+#   docker compose --profile gpu up -d --build
+
+services:
+  qwen3-tts:
+    build: .
+    ports:
+      - "8880:8880"
+    volumes:
+      - huggingface_cache:/root/.cache/huggingface
+    environment:
+      - QWEN3_TTS_CONFIG=/app/config.yaml
+      - HF_HOME=/root/.cache/huggingface
+      - QWEN3_TTS_DEVICE=cpu
+      - QWEN3_TTS_MODEL_ID=Qwen/Qwen3-TTS-12Hz-0.6B-CustomVoice
+      - QWEN3_TTS_DTYPE=float32
+    restart: unless-stopped
+
+  qwen3-tts-gpu:
+    profiles: [gpu]
+    build: .
+    ports:
+      - "8880:8880"
+    gpus: all
+    volumes:
+      - huggingface_cache:/root/.cache/huggingface
+    environment:
+      - QWEN3_TTS_CONFIG=/app/config.yaml
+      - HF_HOME=/root/.cache/huggingface
+      - QWEN3_TTS_DEVICE=cuda:0
+      - QWEN3_TTS_MODEL_ID=Qwen/Qwen3-TTS-12Hz-1.7B-CustomVoice
+      - QWEN3_TTS_DTYPE=bfloat16
+      - QWEN3_TTS_ATTN=sdpa
+    restart: unless-stopped
+
+volumes:
+  huggingface_cache:
