@@ -1,5 +1,8 @@
 # Why can't a 7B parameter model simply run on a GPU with 14 GB of VRAM?
 
+> **Enterprise AI Engineering – Daily Challenges**
+>
+> **Challenge #001**
 > **Category:** LLM Inference
 >
 > **Difficulty:** Beginner → Intermediate
@@ -462,6 +465,10 @@ These are the questions that distinguish a successful production deployment from
 
 ---
 
-**Next Challenge**
+Happy Learning!!
 
-> **Why does increasing the context window dramatically increase GPU memory usage, even when the model itself doesn't change?**
+## Enterprise AI Engineering – Daily Challenges
+
+This article is part of my **Enterprise AI Engineering – Daily Challenges** series, where I share practical insights into AI infrastructure, cloud architecture, enterprise software engineering, and production-ready AI systems.
+
+If you found this challenge useful, ⭐ consider following the repository and joining the journey as we explore one engineering challenge every day.

@@ -399,15 +399,8 @@ it's the one that manages GPU memory most intelligently.
 
 ---
 
-# What's Next?
+Happy Learning!!
 
-In **Challenge #005**, we'll explore another major innovation in modern LLM serving:
-
-> **What is Continuous Batching, and Why Is It Much Faster Than Traditional Static Batching?**
-
-You'll learn why Continuous Batching dramatically improves GPU utilization and why it's one of the key reasons vLLM can serve many more users than traditional inference engines.
-
----
 
 ## Enterprise AI Engineering – Daily Challenges
 

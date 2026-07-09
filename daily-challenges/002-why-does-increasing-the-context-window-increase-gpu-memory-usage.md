@@ -2,8 +2,7 @@
 
 > **Enterprise AI Engineering – Daily Challenges**
 >
-> **Challenge #002**
->
+> **Challenge #002**>
 > **Category:** LLM Infrastructure
 >
 > **Difficulty:** Beginner → Intermediate
@@ -364,17 +363,7 @@ Start asking:
 
 These are the questions that separate successful production AI systems from expensive proof-of-concepts.
 
----
-
-# What's Next?
-
-In the next challenge, we'll answer another common question:
-
-> **What is the KV Cache, and why is it one of the biggest consumers of GPU memory during LLM inference?**
-
-Stay tuned for **Challenge #003**.
-
----
+Happy Learning!!
 
 ## Enterprise AI Engineering – Daily Challenges
 

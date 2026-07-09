@@ -446,15 +446,8 @@ The best architecture is the one that solves **your bottleneck**, not the one wi
 
 ---
 
-# What's Next?
+Happy Learning!!
 
-In **Challenge #012**, we'll explore another essential concept in distributed AI systems:
-
-> **What Is Data Parallelism, and Why Is It Different from Tensor and Pipeline Parallelism?**
-
-We'll see how production AI platforms combine all three techniques to train and serve today's largest language models.
-
----
 
 ## Enterprise AI Engineering – Daily Challenges
 

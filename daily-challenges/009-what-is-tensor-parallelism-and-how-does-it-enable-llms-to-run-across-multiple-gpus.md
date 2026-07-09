@@ -411,15 +411,8 @@ Choosing the right parallelism strategy is just as important as choosing the rig
 
 ---
 
-# What's Next?
+Happy Learning!!
 
-In **Challenge #010**, we'll explore another fundamental scaling technique:
-
-> **What Is Pipeline Parallelism, and When Should You Use It Instead of Tensor Parallelism?**
-
-You'll learn how modern LLM platforms combine both approaches to serve models with hundreds of billions of parameters.
-
----
 
 ## Enterprise AI Engineering – Daily Challenges
 

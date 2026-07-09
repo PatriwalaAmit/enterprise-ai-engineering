@@ -376,15 +376,7 @@ It's the one that uses its hardware most intelligently.
 
 ---
 
-# What's Next?
-
-In **Challenge #007**, we'll explore another breakthrough in modern transformers:
-
-> **FlashAttention vs. PagedAttention: What's the Difference, and Why Do We Need Both?**
-
-Although their names sound similar, they solve completely different problems—and understanding that difference is essential for anyone building production LLM systems.
-
----
+Happy Learning!!
 
 ## Enterprise AI Engineering – Daily Challenges
 

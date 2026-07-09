@@ -343,15 +343,7 @@ Understanding where each optimization fits helps you make better architectural d
 
 ---
 
-# What's Next?
-
-In **Challenge #008**, we'll answer another important question:
-
-> **What Is Speculative Decoding, and How Can It Generate Tokens Faster Without Changing the Model?**
-
-You'll discover one of the most exciting inference optimization techniques that improves generation speed while maintaining output quality.
-
----
+Happy Learning!!
 
 ## Enterprise AI Engineering – Daily Challenges
 

@@ -390,13 +390,8 @@ It's the memory required to remember the conversation.
 
 ---
 
-# What's Next?
+Happy Learning!!
 
-In **Challenge #004**, we'll explore one of the biggest breakthroughs in LLM serving:
-
-> **What is PagedAttention, and how does vLLM serve thousands of requests without running out of GPU memory?**
-
----
 
 ## Enterprise AI Engineering – Daily Challenges
 

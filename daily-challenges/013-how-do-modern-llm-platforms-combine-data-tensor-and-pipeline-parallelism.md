@@ -440,17 +440,10 @@ You've built the foundation needed to understand modern LLM serving architecture
 
 ---
 
-# What's Next?
 
-Welcome to **Module 4 – Production LLM Platform Engineering**.
+Happy Learning!!
 
-Our next challenge explores another critical question:
 
-> **How Does an LLM Router Decide Which Model Should Answer a Request?**
-
-We'll move beyond GPU optimization and begin designing enterprise-scale AI platforms.
-
----
 
 ## Enterprise AI Engineering – Daily Challenges
 

@@ -420,15 +420,8 @@ The best distributed AI systems are carefully designed—not simply scaled.
 
 ---
 
-# What's Next?
+Happy Learning!!
 
-In **Challenge #011**, we'll compare two of the most important distributed inference techniques:
-
-> **Tensor Parallelism vs. Pipeline Parallelism: Which One Should You Choose?**
-
-You'll learn where each technique shines, their trade-offs, and how they're combined in real-world LLM deployments.
-
----
 
 ## Enterprise AI Engineering – Daily Challenges
 

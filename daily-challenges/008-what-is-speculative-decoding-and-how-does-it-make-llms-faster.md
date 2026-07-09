@@ -392,15 +392,7 @@ Smart architecture often delivers bigger performance gains than expensive hardwa
 
 ---
 
-# What's Next?
-
-In **Challenge #009**, we'll explore another critical concept in scaling Large Language Models:
-
-> **What Is Tensor Parallelism, and How Can One Model Run Across Multiple GPUs?**
-
-You'll learn how models that don't fit on a single GPU are distributed efficiently across multiple devices for production inference.
-
----
+Happy Learning!!
 
 ## Enterprise AI Engineering – Daily Challenges
 

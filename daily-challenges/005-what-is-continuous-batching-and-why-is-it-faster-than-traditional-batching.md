@@ -405,15 +405,7 @@ Often, the biggest performance gains come from better infrastructure design—no
 
 ---
 
-# What's Next?
-
-In **Challenge #006**, we'll answer another important question:
-
-> **Why Is vLLM Significantly Faster Than Traditional LLM Inference Engines?**
-
-We'll bring together everything you've learned so far—KV Cache, PagedAttention, and Continuous Batching—to understand why modern inference engines dramatically outperform traditional approaches.
-
----
+Happy Learning!!
 
 ## Enterprise AI Engineering – Daily Challenges
 

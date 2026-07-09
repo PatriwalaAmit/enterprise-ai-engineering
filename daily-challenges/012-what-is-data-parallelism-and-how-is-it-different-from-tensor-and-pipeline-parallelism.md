@@ -490,15 +490,8 @@ The best architecture solves the actual bottleneck—not the most complicated on
 
 ---
 
-# What's Next?
+Happy Learning!!
 
-In **Challenge #013**, we'll bring everything together:
-
-> **Distributed LLM Inference: How Tensor, Pipeline, and Data Parallelism Work Together in Production**
-
-You'll learn how modern AI platforms combine all three techniques to deploy and scale today's largest language models efficiently.
-
----
 
 ## Enterprise AI Engineering – Daily Challenges
 
