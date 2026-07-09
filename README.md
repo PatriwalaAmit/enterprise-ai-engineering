@@ -50,7 +50,7 @@ Everything here is designed to help engineers, architects, CTOs, founders, and t
 
 📅 [Daily Engineering Challenges](./daily-challenges/README.md)
 
-🚀 Projects
+🚀 [Projects](./Projects/README.md)
 
 🏗 Architecture Patterns
 
@@ -58,7 +58,7 @@ Everything here is designed to help engineers, architects, CTOs, founders, and t
 
 ☁️ Cloud Engineering
 
-📖 Learning Paths
+📖 [Learning Paths](./Learning/README.md)
 
 ---
 
