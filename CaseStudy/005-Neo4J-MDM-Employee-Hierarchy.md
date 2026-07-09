@@ -5,7 +5,8 @@
 | | |
 |---|---|
 | **Project** | MDM Employee Hierarchy Graph POC |
-| **Branch** | `dev-implement-concept` |
+| **Location** | [`Projects/MDM-NEO4J/`](../Projects/MDM-NEO4J/) |
+| **Project README** | [Projects/MDM-NEO4J/README.md](../Projects/MDM-NEO4J/README.md) |
 | **Status** | Proof of Concept — validated locally |
 | **Admin UI** | http://localhost:3000 |
 | **Neo4j Browser** | http://localhost:7474 |
@@ -152,25 +153,34 @@ We evaluated recursive SQL (CTEs), closure tables, and graph databases. We chose
 ┌─────────────┐     ┌──────────────────┐     ┌─────────────┐
 │  Admin UI   │────▶│  Query Pipeline  │────▶│   Neo4j     │
 │  REST API   │     │  + Graph Service │     │  (Docker)   │
-└─────────────┘     └──────────────────┘     └─────────────┘
-                           │
+└─────────────┘     └────────┬─────────┘     └─────────────┘
+                             │
                     Intent + Traversal
                     Options Resolver
+                             │
+                    ┌────────┴────────┐
+                    │  Redis (cache)  │  optional — degrades gracefully
+                    │  Gemini (LLM)   │  optional — fallback when graph misses
+                    └─────────────────┘
 ```
 
-**Stack:** Neo4j 5.x Community · Node.js + TypeScript · `neo4j-driver` · Express · Docker Compose · static Admin UI
+**Stack:** Neo4j 5.x Community · Node.js 20+ · TypeScript · `neo4j-driver` · Express · Redis 7 · Docker Compose · static Admin UI (`public/`)
+
+**Repository layout:** all source lives under [`Projects/MDM-NEO4J/`](../Projects/MDM-NEO4J/). There is no in-project `documentation/` folder — this case study is the consolidated reference.
 
 ### Implementation steps
 
 | Step | Component | What it does |
 |---|---|---|
-| 1 | `docker-compose.yml` | Neo4j Bolt (`7687`) + Browser (`7474`) |
+| 1 | `docker-compose.yml` | Neo4j Bolt (`7687`) + Browser (`7474`) + Redis (`6379`); optional `app` service |
 | 2 | `scripts/seedGraph.ts` | Loads 10 nodes + 17 MDM relationships via `MERGE` |
 | 3 | `src/services/graphService.ts` | Cypher CRUD, entity traversal, edge-type filtering |
 | 4 | `src/services/intentDetector.ts` | Routes MDM phrases to `MULTI_HOP` |
 | 5 | `resolveTraversalOptions()` | Maps query phrasing → `minHops`, `maxHops`, `edgeTypes` |
-| 6 | `src/pipeline/queryPipeline.ts` | Orchestrates: intent → traversal → response |
-| 7 | `public/` | Admin console — dashboard, query, graph, CRUD |
+| 6 | `src/pipeline/queryPipeline.ts` | Orchestrates: intent → traversal → response; Redis cache + Gemini fallback |
+| 7 | `src/monitoring/` | Winston logging (`logs/`) and runtime query metrics |
+| 8 | `src/jobs/mergeCurator.ts` | Cron job to promote high-confidence `temp` nodes to `main` |
+| 9 | `public/` | Admin console — dashboard, query, graph, CRUD |
 
 ### Query-aware traversal
 
@@ -389,7 +399,10 @@ SET r.type = 'reports_to', r.weight = 1.0, r.evidence = 'Promotion — new prima
 
 ## 7. How to Run
 
+From the repository root:
+
 ```bash
+cd Projects/MDM-NEO4J
 docker compose up neo4j redis -d
 cp .env.example .env
 npm install
@@ -402,6 +415,8 @@ npm run dev
 | **Admin UI** | http://localhost:3000 |
 | **API info** | http://localhost:3000/api |
 | **Neo4j Browser** | http://localhost:7474 (`neo4j` / `.env` password) |
+
+> **Docker alternative:** `docker compose up -d` runs Neo4j, Redis, and the compiled app container together. See [Projects/MDM-NEO4J/README.md](../Projects/MDM-NEO4J/README.md) for full setup details.
 
 ### Validation checklist
 
@@ -549,6 +564,8 @@ This POC demonstrates that Neo4j addresses the core MDM hierarchy problem:
 
 **Recommended next step:** Hybrid architecture — relational DB for transactional employee records and audit; Neo4j for hierarchy network queries, org-chart visualization, and relationship-heavy MDM reads.
 
+**Project repo:** [`Projects/MDM-NEO4J/`](../Projects/MDM-NEO4J/) · [README](../Projects/MDM-NEO4J/README.md) · [Projects index](../Projects/README.md)
+
 ---
 
 ## 12. Appendices
@@ -582,18 +599,51 @@ LIMIT 1
 
 ### B. Key source files
 
+All paths are relative to `Projects/MDM-NEO4J/`:
+
 | File | Role |
 |---|---|
 | `scripts/seedGraph.ts` | MDM employee hierarchy seed data |
 | `src/services/graphService.ts` | Neo4j driver, traversal, `resolveTraversalOptions()` |
 | `src/services/intentDetector.ts` | MDM phrase → intent routing |
-| `src/pipeline/queryPipeline.ts` | Query orchestration |
+| `src/pipeline/queryPipeline.ts` | Query orchestration, Redis cache, Gemini fallback |
 | `src/services/responseBuilder.ts` | Path → human-readable answer |
-| `src/schema/nodeSchema.ts` | MDM edge types |
+| `src/services/geminiService.ts` | Optional LLM fallback when graph has no match |
+| `src/services/embeddingService.ts` | Embedding provider for temp-node enrichment |
+| `src/schema/nodeSchema.ts` | MDM edge types and node factory |
+| `src/schema/intentTypes.ts` | Intent and routing type definitions |
+| `src/api/server.ts` | Express server, static UI, merge curator startup |
 | `src/api/adminRoutes.ts` | CRUD + reassign-manager APIs |
-| `public/index.html` / `app.js` | MDM Graph Console |
+| `src/jobs/mergeCurator.ts` | Cron-based temp → main promotion |
+| `src/monitoring/logger.ts` | Winston file + console logging |
+| `src/monitoring/metrics.ts` | Runtime query and graph metrics |
+| `public/index.html` / `app.js` / `styles.css` | MDM Graph Console admin UI |
+| `docker-compose.yml` | Neo4j, Redis, and optional app service |
+| `.env.example` | Environment variable template |
 
-### C. Broader MDM applicability
+### C. Project structure
+
+```
+Projects/MDM-NEO4J/
+├── public/                 # Admin UI
+├── src/
+│   ├── api/                # Express server + admin routes
+│   ├── pipeline/           # Query orchestration
+│   ├── services/           # Neo4j, intent, Gemini, embeddings
+│   ├── schema/             # Node/edge types
+│   ├── jobs/               # Merge curator
+│   └── monitoring/         # Logger + metrics
+├── scripts/
+│   ├── seedGraph.ts
+│   └── runMerge.ts
+├── docker-compose.yml
+├── Dockerfile
+├── package.json
+├── tsconfig.json
+└── .env.example
+```
+
+### D. Broader MDM applicability
 
 | Domain | Nodes | Example relationships |
 |---|---|---|

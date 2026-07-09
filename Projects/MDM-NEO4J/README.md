@@ -55,7 +55,7 @@ Neo4j treats relationships as first-class data. This POC validates that approach
 
 ```bash
 git clone <repository-url>
-cd NodebaseLLM
+cd enterprise-ai-engineering/Projects/MDM-NEO4J
 npm install
 ```
 
@@ -74,6 +74,8 @@ docker compose up neo4j redis -d
 ```
 
 Wait ~30 seconds for Neo4j to become healthy.
+
+> **Optional:** run the full stack (app + Neo4j + Redis) in Docker: `docker compose up -d`
 
 | Service | URL |
 |---|---|
@@ -220,33 +222,36 @@ Sarah Chen (CEO)
 ## Project Structure
 
 ```
-NodebaseLLM/
+Projects/MDM-NEO4J/
 ├── public/                 # Admin UI (HTML, CSS, JS)
 ├── src/
 │   ├── api/                # Express server + admin routes
-│   ├── pipeline/           # Query orchestration
-│   ├── services/           # Neo4j, intent, Gemini, embeddings
-│   ├── schema/             # Node/edge types
-│   └── jobs/               # Merge curator cron
+│   ├── pipeline/           # Query orchestration (intent → graph → response)
+│   ├── services/           # Neo4j, intent, Gemini, embeddings, response builder
+│   ├── schema/             # Node/edge types and validation
+│   ├── jobs/               # Merge curator cron
+│   └── monitoring/         # Winston logger + runtime metrics
 ├── scripts/
-│   ├── seedGraph.ts        # MDM seed data
+│   ├── seedGraph.ts        # MDM seed data (10 nodes, 17 edges)
 │   └── runMerge.ts         # Manual merge trigger
-├── documentation/          # Case study, use cases, user guide
-├── docker-compose.yml      # Neo4j + Redis
-└── .env.example
+├── docker-compose.yml      # neo4j, redis, app (optional)
+├── Dockerfile              # Production app image
+├── package.json
+├── tsconfig.json
+├── .env.example
+└── .gitignore
 ```
+
+Runtime artifacts (gitignored): `dist/`, `logs/`, `node_modules/`, `.env`
 
 ---
 
 ## Documentation
 
-| Document | Description |
-|---|---|
-| **[MDM-Employee-Hierarchy.md](documentation/MDM-Employee-Hierarchy.md)** | **Final consolidated case study** — problem, Neo4j, use cases, seed data, user guide |
-| [neo4j-poc-case-study.md](documentation/neo4j-poc-case-study.md) | Detailed case study (source) |
-| [neo4j-poc-use-cases-and-seed-data.md](documentation/neo4j-poc-use-cases-and-seed-data.md) | Validation use cases + seed reference |
-| [neo4j-poc-user-guide.md](documentation/neo4j-poc-user-guide.md) | How to add users, promote, change managers, run queries |
-| [07-setup-guide.md](documentation/07-setup-guide.md) | Detailed setup instructions |
+This POC is documented in two places:
+
+- **[Case Study — MDM Employee Hierarchy](../../CaseStudy/005-Neo4J-MDM-Employee-Hierarchy.md)** — problem, validation use cases, user guide, Cypher examples, success criteria
+- **This README** — quick start, API reference, environment variables
 
 ---
 
@@ -255,23 +260,38 @@ NodebaseLLM/
 | Variable | Default | Description |
 |---|---|---|
 | `PORT` | `3000` | API + UI port |
+| `NODE_ENV` | `development` | Runtime environment |
+| `LOG_LEVEL` | `debug` | Winston log level (`debug`, `info`, `warn`, `error`) |
 | `NEO4J_URI` | `bolt://localhost:7687` | Neo4j Bolt connection |
+| `NEO4J_USER` | `neo4j` | Neo4j username |
 | `NEO4J_PASSWORD` | `graphbos2026` | Neo4j password |
-| `REDIS_URL` | `redis://localhost:6379` | Cache (optional) |
+| `REDIS_URL` | `redis://localhost:6379` | Cache (optional; degrades gracefully if unavailable) |
+| `CACHE_TTL_SECONDS` | `300` | Query result cache TTL |
 | `GEMINI_API_KEY` | — | Enables LLM fallback when set |
+| `GEMINI_MODEL` | `gemini-1.5-flash` | Gemini model for fallback queries |
 | `EMBEDDING_PROVIDER` | `stub` | `stub` or `ollama` |
 | `MERGE_CRON_SCHEDULE` | `*/30 * * * *` | Temp → main merge interval |
+| `MERGE_MIN_CONFIDENCE` | `0.75` | Minimum confidence for auto-promotion |
+| `MERGE_MIN_ACCESS_COUNT` | `3` | Minimum access count for auto-promotion |
 
 ---
 
 ## Production Build
+
+### Local
 
 ```bash
 npm run build
 npm start
 ```
 
-Ensure Neo4j and Redis are running and `.env` is configured before starting.
+### Docker (app + infrastructure)
+
+```bash
+docker compose up -d
+```
+
+Ensure Neo4j and Redis are running and `.env` is configured before starting. When running locally with `npm run dev`, only Neo4j and Redis need to be up — the Node process serves the API and UI directly.
 
 ---
 

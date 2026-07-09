@@ -14,7 +14,7 @@ import { logger } from '../src/monitoring/logger';
 //  - Leave coverage (covers_for)
 //  - Department membership (belongs_to)
 //
-// See documentation/neo4j-poc-use-cases-and-seed-data.md
+// See CaseStudy/005-Neo4J-MDM-Employee-Hierarchy.md (validation use cases + seed reference)
 // ─────────────────────────────────────────────────────────────────────────────
 
 async function seed() {

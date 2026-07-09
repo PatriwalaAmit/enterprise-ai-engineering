@@ -1,6 +1,45 @@
+# ─── Dependencies ─────────────────────────────────────────────
 node_modules/
+
+# ─── Build output ───────────────────────────────────────────────
 dist/
-logs/
+build/
+*.tsbuildinfo
+
+# ─── Environment & secrets ────────────────────────────────────
 .env
+.env.*
+!.env.example
+
+# ─── Logs & runtime ───────────────────────────────────────────
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# ─── Test & coverage ──────────────────────────────────────────
+coverage/
+.nyc_output/
+
+# ─── TypeScript artifacts ───────────────────────────────────────
 *.js.map
 *.d.ts.map
+
+# ─── Docker / local data (if bind-mounted outside volumes) ────
+neo4j_data/
+redis_data/
+
+# ─── OS & editor ──────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# ─── Required project JSON (repo root ignores *.json) ─────────
+!package.json
+!package-lock.json
+!tsconfig.json
