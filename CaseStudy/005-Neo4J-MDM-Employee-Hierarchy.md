@@ -5,8 +5,7 @@
 | | |
 |---|---|
 | **Project** | MDM Employee Hierarchy Graph POC |
-| **Location** | [`Projects/MDM-NEO4J/`](../Projects/MDM-NEO4J/) |
-| **Project README** | [Projects/MDM-NEO4J/README.md](../Projects/MDM-NEO4J/README.md) |
+| **Source code** | [enterprise-ai-mdm-neo4j](https://github.com/PatriwalaAmit/enterprise-ai-mdm-neo4j) |
 | **Status** | Proof of Concept — validated locally |
 | **Admin UI** | http://localhost:3000 |
 | **Neo4j Browser** | http://localhost:7474 |
@@ -166,7 +165,7 @@ We evaluated recursive SQL (CTEs), closure tables, and graph databases. We chose
 
 **Stack:** Neo4j 5.x Community · Node.js 20+ · TypeScript · `neo4j-driver` · Express · Redis 7 · Docker Compose · static Admin UI (`public/`)
 
-**Repository layout:** all source lives under [`Projects/MDM-NEO4J/`](../Projects/MDM-NEO4J/). There is no in-project `documentation/` folder — this case study is the consolidated reference.
+**Repository:** source code lives in **[enterprise-ai-mdm-neo4j](https://github.com/PatriwalaAmit/enterprise-ai-mdm-neo4j)**. There is no in-project `documentation/` folder — this case study is the consolidated reference.
 
 ### Implementation steps
 
@@ -399,10 +398,11 @@ SET r.type = 'reports_to', r.weight = 1.0, r.evidence = 'Promotion — new prima
 
 ## 7. How to Run
 
-From the repository root:
+Clone the project repository:
 
 ```bash
-cd Projects/MDM-NEO4J
+git clone https://github.com/PatriwalaAmit/enterprise-ai-mdm-neo4j.git
+cd enterprise-ai-mdm-neo4j
 docker compose up neo4j redis -d
 cp .env.example .env
 npm install
@@ -416,7 +416,7 @@ npm run dev
 | **API info** | http://localhost:3000/api |
 | **Neo4j Browser** | http://localhost:7474 (`neo4j` / `.env` password) |
 
-> **Docker alternative:** `docker compose up -d` runs Neo4j, Redis, and the compiled app container together. See [Projects/MDM-NEO4J/README.md](../Projects/MDM-NEO4J/README.md) for full setup details.
+> **Docker alternative:** `docker compose up -d` runs Neo4j, Redis, and the compiled app container together. See the [project README](https://github.com/PatriwalaAmit/enterprise-ai-mdm-neo4j#readme) for full setup details.
 
 ### Validation checklist
 
@@ -564,7 +564,7 @@ This POC demonstrates that Neo4j addresses the core MDM hierarchy problem:
 
 **Recommended next step:** Hybrid architecture — relational DB for transactional employee records and audit; Neo4j for hierarchy network queries, org-chart visualization, and relationship-heavy MDM reads.
 
-**Project repo:** [`Projects/MDM-NEO4J/`](../Projects/MDM-NEO4J/) · [README](../Projects/MDM-NEO4J/README.md) · [Projects index](../Projects/README.md)
+**Project repo:** [enterprise-ai-mdm-neo4j](https://github.com/PatriwalaAmit/enterprise-ai-mdm-neo4j) · [Projects index](../Projects/README.md)
 
 ---
 
@@ -599,7 +599,7 @@ LIMIT 1
 
 ### B. Key source files
 
-All paths are relative to `Projects/MDM-NEO4J/`:
+All paths are relative to the [enterprise-ai-mdm-neo4j](https://github.com/PatriwalaAmit/enterprise-ai-mdm-neo4j) repository root:
 
 | File | Role |
 |---|---|
@@ -624,7 +624,7 @@ All paths are relative to `Projects/MDM-NEO4J/`:
 ### C. Project structure
 
 ```
-Projects/MDM-NEO4J/
+enterprise-ai-mdm-neo4j/
 ├── public/                 # Admin UI
 ├── src/
 │   ├── api/                # Express server + admin routes
