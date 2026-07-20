@@ -50,7 +50,11 @@ Everything here is designed to help engineers, architects, CTOs, founders, and t
 
 📅 [Daily Engineering Challenges](./daily-challenges/README.md)
 
+📂 [Case Studies](./CaseStudy/README.md)
+
 🚀 [Projects](./Projects/README.md)
+
+🎯 [Interview Preparation](./Interview/README.md)
 
 🏗 Architecture Patterns
 
