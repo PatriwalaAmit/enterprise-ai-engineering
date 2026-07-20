@@ -10,3 +10,5 @@ Production architecture reviews, implementation notes, and enterprise design wri
 | 004 | [Replacing Kokoro-FastAPI with Qwen3-TTS](./004-Replacing-Kokoro-FastAPI-with-Qwen3-TTS.md) | TTS / Voice Agents | ✅ |
 | 005 | [MDM employee hierarchy with Neo4j](./005-Neo4J-MDM-Employee-Hierarchy.md) | MDM / Graph DB | ✅ |
 | 006 | [From demo to production: Azure serverless order processing](./006-from-demo-to-production-closing-gaps-in-azure-serverless-order-processing.md) | Azure / Serverless | ✅ |
+| 007 | [DSPLM — Dynamic Sparse Parameter Language Models](./007-dsplm-dynamic-sparse-parameter-language-models.md) | LLM Architecture | 🚧 |
+| 008 | [AI GPU Capacity Planner — from guesswork to deployment blueprints](./008-ai-gpu-capacity-planner.md) | LLM Inference / Capacity Planning | ✅ |
