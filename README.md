@@ -56,7 +56,7 @@ Everything here is designed to help engineers, architects, CTOs, founders, and t
 
 🎯 [Interview Preparation](./Interview/README.md)
 
-🧰 [Tools](./Tools/README.md) · [AI Engineer's Toolbox 2026](./Tools/The_AI_Engineers_Toolbox_2026_Edition/README.md)
+🧰 [AI Tools](./Tools/README.md) · [AI Engineer's Toolbox 2026](./Tools/The_AI_Engineers_Toolbox_2026_Edition/README.md)
 
 🏗 Architecture Patterns
 

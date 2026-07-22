@@ -15,16 +15,16 @@ This series curates the most impactful open-source AI projects and organizes the
 | 00 | [Introduction](./00-Introduction.md) — stack overview, how to read the guide, categories | ✅ |
 | 01 | [AI Agents & Agent Frameworks](./01-AI-Agents-and-Agent-Frameworks.md) — from prompts to agent runtimes | ✅ |
 | 02 | [Retrieval, Search & RAG](./02-Retrieval-Search-and-RAG.md) — beyond vector search | ✅ |
-| 03 | Knowledge & Memory | 🚧 Planned |
-| 04 | LLM Inference & Optimization | 🚧 Planned |
-| 05 | Local AI Platforms | 🚧 Planned |
-| 06 | Fine-Tuning & Training | 🚧 Planned |
-| 07 | Voice AI | 🚧 Planned |
-| 08 | Multimodal AI | 🚧 Planned |
-| 09 | Evaluation, Guardrails & Observability | 🚧 Planned |
-| 10 | Infrastructure & Deployment | 🚧 Planned |
-| 11 | Developer Productivity | 🚧 Planned |
-| 12 | Learning Resources | 🚧 Planned |
+| 03 | [Knowledge Representation & Memory](./03-Knowledge-Representation-and-Memory.md) — persistent memory, knowledge graphs, OKF | ✅ |
+| 04 | [LLM Inference & Optimization](./04-LLM-Inference-and-Optimization.md) — serving, quantization, local runtimes | ✅ |
+| 05 | [Local AI Platforms](./05-Local-AI-Platforms.md) — Ollama, Open WebUI, LocalAI, private RAG | ✅ |
+| 06 | [Fine-Tuning & Training](./06-Fine-Tuning-and-Training.md) — LoRA, QLoRA, PEFT, RLHF, distributed training | ✅ |
+| 07 | [Voice AI](./07-Voice-AI.md) — ASR, TTS, VAD, real-time voice agents | ✅ |
+| 08 | [Multimodal AI](./08-Multimodal-AI.md) — VLMs, OCR, document vision, video pipelines | ✅ |
+| 09 | [Evaluation, Guardrails & Observability](./09-Evaluation-Guardrails-and-Observability.md) — eval, safety, tracing | ✅ |
+| 10 | [AI Infrastructure & Deployment](./10-AI-Infrastructure-and-Deployment.md) — Kubernetes, serving, GPU, IaC | ✅ |
+| 11 | [Developer Productivity](./11-Developer-Productivity.md) — coding assistants, agents, low-code AI | ✅ |
+| 12 | [Learning Resources](./12-Learning-Resources.md) — books, courses, papers, communities | ✅ |
 
 ---
 
@@ -58,16 +58,16 @@ This series curates the most impactful open-source AI projects and organizes the
 | --- | --- | --- |
 | 🤖 AI Agents & Agent Frameworks | Autonomous workflows and orchestration | [01](./01-AI-Agents-and-Agent-Frameworks.md) |
 | 🔍 Retrieval & RAG | Search, indexing, embeddings, document intelligence | [02](./02-Retrieval-Search-and-RAG.md) |
-| 🧠 Knowledge & Memory | Knowledge graphs, memory systems, structured knowledge | Planned |
-| ⚡ LLM Inference | Serving, quantization, optimization | Planned |
-| 💻 Local AI Platforms | Offline AI, desktop runtimes | Planned |
-| 🎯 Fine-Tuning & Training | Model customization and RL | Planned |
-| 🎤 Voice AI | Speech synthesis and conversational audio | Planned |
-| 👁️ Multimodal AI | Image, video, document understanding | Planned |
-| 🛡️ Evaluation & Guardrails | Testing, safety, observability | Planned |
-| ☁️ Infrastructure & Deployment | Scaling production AI | Planned |
-| 🛠️ Developer Productivity | AI engineering utilities | Planned |
-| 📚 Learning Resources | Courses and educational projects | Planned |
+| 🧠 Knowledge & Memory | Knowledge graphs, memory systems, structured knowledge | [03](./03-Knowledge-Representation-and-Memory.md) |
+| ⚡ LLM Inference | Serving, quantization, optimization | [04](./04-LLM-Inference-and-Optimization.md) |
+| 💻 Local AI Platforms | Offline AI, desktop runtimes | [05](./05-Local-AI-Platforms.md) |
+| 🎯 Fine-Tuning & Training | Model customization and RL | [06](./06-Fine-Tuning-and-Training.md) |
+| 🎤 Voice AI | Speech synthesis and conversational audio | [07](./07-Voice-AI.md) |
+| 👁️ Multimodal AI | Image, video, document understanding | [08](./08-Multimodal-AI.md) |
+| 🛡️ Evaluation & Guardrails | Testing, safety, observability | [09](./09-Evaluation-Guardrails-and-Observability.md) |
+| ☁️ Infrastructure & Deployment | Scaling production AI | [10](./10-AI-Infrastructure-and-Deployment.md) |
+| 🛠️ Developer Productivity | AI engineering utilities | [11](./11-Developer-Productivity.md) |
+| 📚 Learning Resources | Courses and educational projects | [12](./12-Learning-Resources.md) |
 
 ---
 
@@ -91,5 +91,5 @@ This series curates the most impactful open-source AI projects and organizes the
 ## Start here
 
 1. Read the [Introduction](./00-Introduction.md) for the stack map and entry format.
-2. Continue with [AI Agents](./01-AI-Agents-and-Agent-Frameworks.md) and [Retrieval & RAG](./02-Retrieval-Search-and-RAG.md).
-3. Check back as later chapters land under this folder.
+2. Work through chapters [00](./00-Introduction.md)–[12](./12-Learning-Resources.md) in order, or jump by category from the table above.
+3. Cross-reference tools in the [Tools index](../README.md).
