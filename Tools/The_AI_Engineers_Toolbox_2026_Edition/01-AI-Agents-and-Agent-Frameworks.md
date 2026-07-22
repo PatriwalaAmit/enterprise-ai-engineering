@@ -146,75 +146,175 @@ Supports iterative planning, retries, and human approval.
 
 **Category:** Multi-Agent Collaboration
 
-**Official:** [https://github.com/crewAIInc/crewAI](https://github.com/crewAIInc/crewAI)
+**What it is**
 
-**Highlights**
+A multi-agent framework where you define role-based agents (researcher, writer, analyst) that collaborate on shared goals through delegated tasks and sequential or hierarchical crew workflows.
+
+**Why it matters**
+
+Many real workflows are team problems, not single-agent loops. CrewAI makes multi-agent collaboration approachable without forcing you to hand-build conversation protocols between specialists.
+
+**Best for**
+
+- Content and research pipelines
+- Role-specialized agent teams
+- Rapid multi-agent prototypes
+- Business process automation with clear handoffs
+
+**Key Features**
 
 - Role-based agents
 - Task delegation
-- Collaborative workflows
+- Collaborative crew workflows
+- Sequential and hierarchical process modes
+- Tool integration per agent
+
+**Official:** [https://github.com/crewAIInc/crewAI](https://github.com/crewAIInc/crewAI)
 
 ## 4. AutoGen
 
 **Category:** Conversational Multi-Agent Systems
 
-**Official:** [https://github.com/microsoft/autogen](https://github.com/microsoft/autogen)
+**What it is**
 
-**Highlights**
+Microsoft's framework for building multi-agent applications where agents solve problems through structured conversations, tool use, and collaborative reasoning—rather than a single monolithic agent loop.
 
-- Agent conversations
+**Why it matters**
+
+Conversation-driven multi-agent design is a powerful pattern for research, coding assistants, and systems that benefit from critique, debate, or specialist handoffs between agents.
+
+**Best for**
+
+- Research and experimentation
+- Coding and problem-solving agents
+- Multi-agent dialogue patterns
+- Tool-augmented collaborative reasoning
+
+**Key Features**
+
+- Agent-to-agent conversations
 - Tool integration
 - Collaborative reasoning
+- Extensible agent types
+- Strong fit for prototyping multi-agent topologies
+
+**Official:** [https://github.com/microsoft/autogen](https://github.com/microsoft/autogen)
 
 ## 5. Semantic Kernel
 
 **Category:** Enterprise Agent Framework
 
-**Official:** [https://github.com/microsoft/semantic-kernel](https://github.com/microsoft/semantic-kernel)
+**What it is**
 
-**Highlights**
+Microsoft's SDK for composing LLMs, prompts, plugins, and planners into enterprise applications—with first-class support for .NET and Python and connectors into common business systems.
+
+**Why it matters**
+
+Enterprises already invested in Microsoft stacks need an agent/orchestration layer that fits existing languages, identity, and integration patterns—not only Python-first research frameworks.
+
+**Best for**
+
+- Enterprise .NET applications
+- Plugin-style tool integration
+- Planner-driven workflows
+- Teams standardizing on Microsoft AI tooling
+
+**Key Features**
 
 - Plugin architecture
 - Planner support
 - Enterprise connectors
-- .NET & Python
+- .NET and Python SDKs
+- Prompt and function orchestration
+
+**Official:** [https://github.com/microsoft/semantic-kernel](https://github.com/microsoft/semantic-kernel)
 
 ## 6. OpenAI Agents SDK
 
 **Category:** Production Agent Development
 
-**Official:** [https://github.com/openai/openai-agents-python](https://github.com/openai/openai-agents-python)
+**What it is**
 
-**Highlights**
+OpenAI's lightweight Python SDK for building production agents with tools, handoffs between agents, structured outputs, and built-in tracing—designed to work cleanly with the OpenAI platform.
+
+**Why it matters**
+
+If your stack is OpenAI-centric, you get a first-party agent harness with production concerns (handoffs, structured results, tracing) instead of bolting those on later.
+
+**Best for**
+
+- OpenAI-based applications
+- Multi-agent handoffs
+- Structured output workflows
+- Teams that want tracing without assembling a full observability stack first
+
+**Key Features**
 
 - Tool calling
-- Handoffs
+- Agent handoffs
 - Structured outputs
 - Built-in tracing
+- Production-oriented defaults
+
+**Official:** [https://github.com/openai/openai-agents-python](https://github.com/openai/openai-agents-python)
 
 ## 7. TEN Framework
 
 **Category:** Real-Time Multimodal Agents
 
-**Official:** [https://github.com/TEN-framework/ten-framework](https://github.com/TEN-framework/ten-framework)
+**What it is**
 
-**Highlights**
+An open-source framework for building real-time, multimodal agents that combine speech, streaming interaction, and broader multimodal processing—not just text chat turn-taking.
+
+**Why it matters**
+
+Voice and real-time experiences fail when bolted onto text-only agent loops. TEN targets the latency and modality requirements of conversational and multimodal agents from the start.
+
+**Best for**
+
+- Real-time voice agents
+- Multimodal conversational apps
+- Streaming interactive experiences
+- Speech-integrated workflows
+
+**Key Features**
 
 - Real-time streaming
 - Speech integration
 - Multimodal processing
+- Low-latency interaction patterns
+- Extensible agent runtime for realtime use cases
+
+**Official:** [https://github.com/TEN-framework/ten-framework](https://github.com/TEN-framework/ten-framework)
 
 ## 8. Flue Framework
 
 **Category:** Durable AI Workflows
 
-**Official:** [https://flueframework.com/](https://flueframework.com/)
+**What it is**
 
-**Highlights**
+A TypeScript-first framework for durable AI workflows with provider independence—focused on reliable, long-running execution rather than one-shot prompt calls.
 
-- TypeScript-first
+**Why it matters**
+
+JavaScript/TypeScript teams building production AI often lack a durable orchestration story. Flue targets that gap with workflow durability and freedom from a single model provider.
+
+**Best for**
+
+- TypeScript AI applications
+- Durable multi-step workflows
+- Provider-agnostic stacks
+- Node/edge-oriented engineering teams
+
+**Key Features**
+
+- TypeScript-first design
 - Provider independence
 - Durable execution
+- Workflow-oriented architecture
+- Fit for long-running AI processes
+
+**Official:** [https://flueframework.com/](https://flueframework.com/)
 
 # Choosing the Right Framework
 
