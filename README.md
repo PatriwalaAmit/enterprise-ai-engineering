@@ -73,6 +73,7 @@ Everything here is designed to help engineers, architects, CTOs, founders, and t
 - LinkedIn https://www.linkedin.com/in/amitpatriwala/
 - Medium https://medium.com/@patriwala
 - Blog https://aitechpartner.blog/
+- Website https://aitechpartner.com/
 
 ---
 
