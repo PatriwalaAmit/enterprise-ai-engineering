@@ -14,14 +14,11 @@
 | **Primary Audience**          | Municipal authorities, waste-management operators, smart-city technology providers       |
 | **Stack**                     | React, React Native, .NET Core 8, AWS IoT / SageMaker, TensorFlow Lite, MQTT, PostgreSQL |
 | **Status**                    | Publication-ready                                                                        |
-| **Banner**                    | `[screenshots/case-study-10-banner.png](./screenshots/case-study-10-banner.png)`         |
+| **Screenshots**               | [screenshots/](./screenshots/) — banner, high-level flow, solution overview, architecture |
 
-
-Smart E-Waste Management Solution — AI classification, IoT smart bins, predictive analytics, and optimized collection
+![Smart E-Waste Management Solution banner](./screenshots/case-study-10-banner.jpg)
 
 ---
-
-
 
 ## Executive Summary
 
@@ -69,11 +66,13 @@ These issues compound in denser urban environments and under tightening environm
 
 ---
 
-
-
 ## Solution Approach
 
-The Smart E-Waste Management System integrates hardware, edge intelligence, cloud services, and multi-stakeholder software into a closed-loop platform.
+The Smart E-Waste Management System integrates hardware, edge intelligence, cloud services, and multi-stakeholder software into a closed-loop platform—from citizen disposal through edge classification, cloud analytics, optimized collection, and recycling outcomes.
+
+![High-level flow from citizen disposal to sustainability reporting](./screenshots/case-study-10-high-level-diagram.jpg)
+
+*Figure 1. End-to-end operating flow from responsible disposal to operational and sustainability reporting.*
 
 ### Core Technical Pillars
 
@@ -84,28 +83,17 @@ The Smart E-Waste Management System integrates hardware, edge intelligence, clou
 - **QR-Based End-to-End Tracking**: Each deposit generates a unique QR code that records disposal, collection, transport, facility receipt, processing status, and recovery outcomes. Optional blockchain support can provide immutable records.
 - **Multi-Level Visibility**: React-based admin, state, city, and area dashboards plus React Native mobile apps for collectors and citizens provide role-appropriate views, real-time SignalR updates, analytics, and alerts.
 
+![Solution approach overview with ten pillars and expected outcomes](./screenshots/case-study-10-solution-overview.jpg)
 
+*Figure 2. Solution approach across hardware, edge intelligence, cloud analytics, and multi-stakeholder software.*
 
 ### Architecture Overview
 
 Presentation layer (React web dashboards and React Native apps) communicates with a .NET Core 8 backend (RESTful APIs, SignalR hubs, Hangfire jobs). Cloud services include AWS IoT Core, Lambda, S3, RDS (PostgreSQL), DynamoDB, SageMaker, SNS/SQS, and Cognito. Edge devices use ESP32 or Raspberry Pi with load cells, temperature sensors, GPS, camera, QR scanner, and dual connectivity (Wi-Fi/4G), powered by solar-plus-battery.
 
-```
-Citizen / Collector Apps (React Native)
-Admin / State / City / Area Dashboards (React)
-                │
-                ▼
-        .NET Core 8 APIs + SignalR + Hangfire
-                │
-    ┌───────────┼───────────┐
-    ▼           ▼           ▼
- AWS IoT    SageMaker    RDS / DynamoDB
- (MQTT)     (ML ops)     (state + telemetry)
-    ▲
-    │
- Smart Bins (ESP32 / Raspberry Pi + camera + sensors)
- Edge CNN (TensorFlow Lite) · solar + battery
-```
+![Architecture overview with presentation, backend, AWS, edge, and security layers](./screenshots/case-study-10-architecture.jpg)
+
+*Figure 3. Layered architecture: edge devices, AWS cloud services, .NET Core 8 APIs, and role-based web/mobile clients.*
 
 Security measures encompass TLS-secured MQTT, device certificates, JWT authentication, RBAC, encryption at rest and in transit, and compliance considerations for data-protection and e-waste regulations.
 
@@ -187,9 +175,16 @@ Individual bin statuses ranged from empty to full, confirming real-time visibili
 
 These figures are drawn from pilot measurements and conservative scaling assumptions; actual results will vary with local waste composition, density, and operational discipline.
 
+### Visual assets (included)
+
+| Figure | File | What it shows |
+|--------|------|---------------|
+| Banner | [`screenshots/case-study-10-banner.jpg`](./screenshots/case-study-10-banner.jpg) | Product banner — AI classification, IoT bins, predictive collection |
+| 1 | [`screenshots/case-study-10-high-level-diagram.jpg`](./screenshots/case-study-10-high-level-diagram.jpg) | Citizen-to-reporting end-to-end flow |
+| 2 | [`screenshots/case-study-10-solution-overview.jpg`](./screenshots/case-study-10-solution-overview.jpg) | Ten-pillar solution approach and expected outcomes |
+| 3 | [`screenshots/case-study-10-architecture.jpg`](./screenshots/case-study-10-architecture.jpg) | Presentation, backend, AWS, edge, and security layers |
+
 ---
-
-
 
 ## Lessons Learned
 
