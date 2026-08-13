@@ -99,6 +99,8 @@ Two prioritized, evidence-linked recommendations were delivered to the Clinician
 
 An immutable audit log entry was created. All six stages completed successfully.
 
+![Healthcare AIOS: From Architecture to Step By Step System flow](./screenshots/011-step-by-step-flow.png)
+
 ### Mapping to the OS Model
 
 | OS Component   | Evidence in Simulation                                      | Result |
