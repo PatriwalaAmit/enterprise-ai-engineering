@@ -244,3 +244,430 @@ It is a running platform that:
 The system successfully answers “What should happen next?” for a patient with uncontrolled diabetes and an overdue eye exam — while preserving the core principle that it orchestrates existing healthcare systems rather than replacing them.
 
 The operating system is live.
+
+---
+
+## healthcare-aios
+
+The production-oriented Docker Compose stack that materializes Healthcare AIOS as coordinated infrastructure, observability, and microservices.
+
+```yaml
+# healthcare-aios
+# ─── Shared configuration ─────────────────────────────────────────────────────
+x-common-env: &common-env
+  ENVIRONMENT: development
+  OTEL_EXPORTER_OTLP_ENDPOINT: http://otel-collector:4317
+  PYTHONUNBUFFERED: "1"
+
+x-service-defaults: &service-defaults
+  restart: unless-stopped
+  networks:
+    - aios-internal
+  depends_on:
+    kafka:
+      condition: service_healthy
+    redis:
+      condition: service_healthy
+
+# ─── Services ────────────────────────────────────────────────────────────────
+services:
+
+  # ── Infrastructure ──────────────────────────────────────────────
+
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: aios
+      POSTGRES_USER: aios
+      POSTGRES_PASSWORD: aios_dev_secret  # dev only — use Vault in prod
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./infra/docker-compose/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    ports:
+      - "5432:5432"
+    networks:
+      - aios-internal
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U aios"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    command: redis-server --appendonly yes
+    volumes:
+      - redis-data:/data
+    ports:
+      - "6379:6379"
+    networks:
+      - aios-internal
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.4.0
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    networks:
+      - aios-internal
+    volumes:
+      - zookeeper-data:/var/lib/zookeeper/data
+
+  kafka:
+    image: confluentinc/cp-kafka:7.4.0
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+    ports:
+      - "9092:9092"
+    networks:
+      - aios-internal
+    volumes:
+      - kafka-data:/var/lib/kafka/data
+    healthcheck:
+      test: ["CMD", "kafka-topics", "--bootstrap-server", "kafka:29092", "--list"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    depends_on:
+      kafka:
+        condition: service_healthy
+    environment:
+      KAFKA_CLUSTERS_0_NAME: aios-local
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:29092
+    ports:
+      - "8089:8080"
+    networks:
+      - aios-internal
+
+  neo4j:
+    image: neo4j:5.20
+    environment:
+      NEO4J_AUTH: neo4j/aios_dev_secret
+      NEO4J_PLUGINS: '["apoc", "graph-data-science"]'
+      NEO4J_dbms_security_procedures_unrestricted: apoc.*,gds.*
+      NEO4J_ACCEPT_LICENSE_AGREEMENT: "eval"
+    volumes:
+      - neo4j-data:/data
+    ports:
+      - "7474:7474"  # Browser
+      - "7687:7687"  # Bolt
+    networks:
+      - aios-internal
+    healthcheck:
+      test: ["CMD", "neo4j", "status"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  weaviate:
+    image: semitechnologies/weaviate:1.25.4
+    environment:
+      AUTHENTICATION_ANONYMOUS_ACCESS_ENABLED: "true"
+      PERSISTENCE_DATA_PATH: /var/lib/weaviate
+      DEFAULT_VECTORIZER_MODULE: none
+      ENABLE_MODULES: ""
+      CLUSTER_HOSTNAME: weaviate
+    volumes:
+      - weaviate-data:/var/lib/weaviate
+    ports:
+      - "8090:8080"
+    networks:
+      - aios-internal
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:8080/v1/.well-known/ready"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  hapi-fhir:
+    image: hapiproject/hapi:v7.2.0
+    environment:
+      hapi.fhir.fhir_version: R4
+      hapi.fhir.allow_external_references: "true"
+      hapi.fhir.allow_multiple_delete: "true"
+      spring.datasource.url: jdbc:postgresql://postgres:5432/fhir
+      spring.datasource.username: aios
+      spring.datasource.password: aios_dev_secret
+      spring.datasource.driverClassName: org.postgresql.Driver
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - aios-internal
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8080/fhir/metadata || exit 1"]
+      interval: 30s
+      timeout: 15s
+      retries: 10
+
+  temporal:
+    image: temporalio/auto-setup:1.24.2
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DB: postgresql
+      DB_PORT: 5432
+      POSTGRES_USER: aios
+      POSTGRES_PWD: aios_dev_secret
+      POSTGRES_SEEDS: postgres
+      DYNAMIC_CONFIG_FILE_PATH: config/dynamicconfig/development-sql.yaml
+    ports:
+      - "7233:7233"  # gRPC
+    networks:
+      - aios-internal
+    volumes:
+      - ./infra/docker-compose/temporal-config:/etc/temporal/config/dynamicconfig
+
+  temporal-ui:
+    image: temporalio/ui:2.26.2
+    environment:
+      TEMPORAL_ADDRESS: temporal:7233
+    ports:
+      - "8088:8080"
+    depends_on:
+      - temporal
+    networks:
+      - aios-internal
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:24.0.5
+    command: start-dev --import-realm
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin_dev_secret
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://postgres:5432/keycloak
+      KC_DB_USERNAME: aios
+      KC_DB_PASSWORD: aios_dev_secret
+    volumes:
+      - ./infra/docker-compose/keycloak-realm.json:/opt/keycloak/data/import/realm.json
+    ports:
+      - "8181:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - aios-internal
+
+  opa:
+    image: openpolicyagent/opa:0.66.0
+    command: run --server --watch /policies
+    volumes:
+      - ./policies:/policies:ro
+    ports:
+      - "8182:8181"
+    networks:
+      - aios-internal
+
+  # ── Observability ───────────────────────────────────────────────
+
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:0.102.0
+    command: ["--config=/etc/otelcol-contrib/config.yaml"]
+    volumes:
+      - ./infra/docker-compose/otel-config.yaml:/etc/otelcol-contrib/config.yaml:ro
+    ports:
+      - "4317:4317"  # OTLP gRPC
+      - "4318:4318"  # OTLP HTTP
+    networks:
+      - aios-internal
+
+  prometheus:
+    image: prom/prometheus:v2.52.0
+    volumes:
+      - ./infra/docker-compose/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus-data:/prometheus
+    ports:
+      - "9090:9090"
+    networks:
+      - aios-internal
+
+  grafana:
+    image: grafana/grafana:10.4.3
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: admin_dev_secret
+      GF_INSTALL_PLUGINS: grafana-clock-panel
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./infra/docker-compose/grafana-datasources.yaml:/etc/grafana/provisioning/datasources/datasources.yaml:ro
+    ports:
+      - "3001:3000"
+    networks:
+      - aios-internal
+
+  # ── AIOS Services ───────────────────────────────────────────────
+
+  api-gateway:
+    build:
+      context: .
+      dockerfile: services/api-gateway/Dockerfile
+    <<: *service-defaults
+    environment:
+      <<: *common-env
+      REDIS_URL: redis://redis:6379/0
+      AGENT_RUNTIME_URL: http://agent-runtime:8001
+      FHIR_GATEWAY_URL: http://fhir-gateway:8002
+      KNOWLEDGE_SERVICE_URL: http://knowledge-service:8003
+      POLICY_ENGINE_URL: http://policy-engine:8004
+      AUDIT_SERVICE_URL: http://audit-service:8005
+      NOTIFICATION_SERVICE_URL: http://notification-service:8006
+      WORKFLOW_ENGINE_URL: http://workflow-engine:8007
+      SMART_ISSUER_URL: http://keycloak:8080/realms/aios
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./services/api-gateway/src:/app/src  # Hot reload in dev
+
+  agent-runtime:
+    build:
+      context: .
+      dockerfile: services/agent-runtime/Dockerfile
+    <<: *service-defaults
+    environment:
+      <<: *common-env
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+      KNOWLEDGE_SERVICE_URL: http://knowledge-service:8003
+      FHIR_GATEWAY_URL: http://fhir-gateway:8002
+      POLICY_ENGINE_URL: http://policy-engine:8004
+      AUDIT_SERVICE_URL: http://audit-service:8005
+      WORKFLOW_ENGINE_URL: http://workflow-engine:8007
+      REDIS_URL: redis://redis:6379/1
+    ports:
+      - "8001:8001"
+
+  fhir-gateway:
+    build:
+      context: .
+      dockerfile: services/fhir-gateway/Dockerfile
+    <<: *service-defaults
+    environment:
+      <<: *common-env
+      HAPI_FHIR_URL: http://hapi-fhir:8080/fhir
+      KAFKA_BOOTSTRAP_SERVERS: kafka:29092
+      AUDIT_SERVICE_URL: http://audit-service:8005
+    ports:
+      - "8002:8002"
+
+  knowledge-service:
+    build:
+      context: .
+      dockerfile: services/knowledge-service/Dockerfile
+    <<: *service-defaults
+    depends_on:
+      neo4j:
+        condition: service_healthy
+      weaviate:
+        condition: service_healthy
+    environment:
+      <<: *common-env
+      NEO4J_URI: bolt://neo4j:7687
+      NEO4J_USER: neo4j
+      NEO4J_PASSWORD: aios_dev_secret
+      WEAVIATE_URL: http://weaviate:8080
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}  # For embeddings
+    ports:
+      - "8003:8003"
+
+  policy-engine:
+    build:
+      context: .
+      dockerfile: services/policy-engine/Dockerfile
+    <<: *service-defaults
+    environment:
+      <<: *common-env
+      OPA_URL: http://opa:8181
+    ports:
+      - "8004:8004"
+
+  audit-service:
+    build:
+      context: .
+      dockerfile: services/audit-service/Dockerfile
+    <<: *service-defaults
+    environment:
+      <<: *common-env
+      KAFKA_BOOTSTRAP_SERVERS: kafka:29092
+      DATABASE_URL: postgresql+asyncpg://aios:aios_dev_secret@postgres:5432/aios
+    ports:
+      - "8005:8005"
+
+  notification-service:
+    build:
+      context: .
+      dockerfile: services/notification-service/Dockerfile
+    <<: *service-defaults
+    environment:
+      <<: *common-env
+      REDIS_URL: redis://redis:6379/2
+      KAFKA_BOOTSTRAP_SERVERS: kafka:29092
+    ports:
+      - "8006:8006"
+
+  workflow-engine:
+    build:
+      context: .
+      dockerfile: services/workflow-engine/Dockerfile
+    <<: *service-defaults
+    depends_on:
+      - temporal
+    environment:
+      <<: *common-env
+      TEMPORAL_HOST: temporal:7233
+      TEMPORAL_NAMESPACE: aios-dev
+      KNOWLEDGE_SERVICE_URL: http://knowledge-service:8003
+      FHIR_GATEWAY_URL: http://fhir-gateway:8002
+      AGENT_RUNTIME_URL: http://agent-runtime:8001
+      NOTIFICATION_SERVICE_URL: http://notification-service:8006
+    ports:
+      - "8007:8007"
+
+  clinician-cockpit:
+    build:
+      context: apps/clinician-cockpit
+      dockerfile: Dockerfile
+    environment:
+      NEXT_PUBLIC_API_URL: http://localhost:8000
+      NEXT_PUBLIC_WS_URL: ws://localhost:8000
+      NEXT_PUBLIC_FHIR_URL: http://localhost:8080/fhir
+    ports:
+      - "3000:3000"
+    networks:
+      - aios-internal
+
+# ─── Networks ────────────────────────────────────────────────────────────────
+networks:
+  aios-internal:
+    driver: bridge
+
+# ─── Volumes ─────────────────────────────────────────────────────────────────
+volumes:
+  postgres-data:
+  redis-data:
+  kafka-data:
+  zookeeper-data:
+  neo4j-data:
+  weaviate-data:
+  prometheus-data:
+  grafana-data:
+```
+
