@@ -15,5 +15,6 @@ Production architecture reviews, implementation notes, and enterprise design wri
 | 008  | [AI GPU Capacity Planner — from guesswork to deployment blueprints](./008-ai-gpu-capacity-planner.md)                                                                                                         | LLM Inference / Capacity Planning | ✅      |
 | 009  | [Northline — buying-committee activity intelligence](./009-northline-buying-committee-activity-intelligence.md)                                                                                               | Sales / Revenue Intelligence      | ✅      |
 | 010  | [Smart E-Waste Management System — IoT, AI, and predictive collection](./010-smart-e-waste-management-system.md)                                                                                              | IoT / Smart City                  | ✅      |
+| 011  | [Healthcare AIOS — from architecture to running platform](./011-healthcare-aios-from-architecture-to-running-platform.md)                                                                                     | Healthcare / Agentic AI           | ✅      |
 
 
